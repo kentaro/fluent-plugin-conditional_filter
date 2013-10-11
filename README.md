@@ -12,9 +12,10 @@ fluent-plugin-conditional_filter provides a simple filter that filters out key/v
 
 ```
 <match test.**>
-  key_pattern @example.com$
-  condition   10
-  filter      numeric_upward
+  add_tag_prefix filtered
+  key_pattern    @example.com$
+  condition      10
+  filter         numeric_upward
 </match>
 ```
 

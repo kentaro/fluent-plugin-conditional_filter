@@ -40,7 +40,12 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
     when 'numeric_upward'
       filter_record = record.select do |key, value|
         key.match(@key_pattern_regexp) &&
-          record[key].to_f >= condition.to_f
+        record[key].to_f >= condition.to_f
+      end
+    when 'numeric_downward'
+      filter_record = record.select do |key, value|
+        key.match(@key_pattern_regexp) &&
+        record[key].to_f <= condition.to_f
       end
     else
       raise ArgumentError.new("[out_conditional_filter] no such filter: #{filter}")

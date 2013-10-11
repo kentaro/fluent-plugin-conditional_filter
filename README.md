@@ -43,6 +43,14 @@ You can also use the params above inherited from [Fluent::HandleTagNameMixin](ht
 
 Filter out such key/value pairs whose value aren't greater than or equal to the given value as float value.
 
+#### numeric_downward
+
+Filter out such key/value pairs whose value aren't smaller than or equal to the given value as float value
+
+#### string_match
+
+Filter out such key/value pairs whose value don't match the given value as string.
+
 ## Installation
 
 Add this line to your application's Gemfile:

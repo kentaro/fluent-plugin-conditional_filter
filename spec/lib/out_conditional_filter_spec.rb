@@ -123,6 +123,57 @@ describe Fluent::ConditionalFilterOutput do
         }
       end
     end
+
+    context('numeric_downward') do
+      let(:conf) {
+        %[
+          key_pattern @example.com$
+          condition   10
+          filter      numeric_downward
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'test').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('with 0 matched key/value pair') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 18, 'bar@example.com' => 26, 'baz@baz.com' => 15)
+          }
+        }
+
+        it {
+          expect(driver.emits[0]).to be_nil
+        }
+      end
+
+      context('with 1 matched key/value pair') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 11, 'bar@example.com' => 6, 'baz@baz.com' => 5)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][2].keys.length).to be == 1
+        }
+      end
+
+      context('with 2 matched key/value pairs') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 10, 'bar@example.com' => 5, 'baz@baz.com' => 5)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][2].keys.length).to be == 2
+        }
+      end
+    end
   end
 end
 

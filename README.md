@@ -10,6 +10,8 @@ fluent-plugin-conditional_filter provides a simple filter that filters out key/v
 
 ### Synopsis
 
+If there's such a configuration as below:
+
 ```
 <match test.**>
   add_tag_prefix filtered.
@@ -17,6 +19,24 @@ fluent-plugin-conditional_filter provides a simple filter that filters out key/v
   condition      10
   filter         numeric_upward
 </match>
+```
+
+When the log below reaches:
+
+```
+'test' => {
+  'foo@example.com' => 5,
+  'bar@example.com' => 15,
+  'baz@baz.com'     -> 12,
+}
+```
+
+key/value pairs that don't match either `key_pattern` or the condition designated by `condition` and `filter` are filtered out.
+
+```
+'filtered.test' => {
+  'bar@example.com' => 15,
+}
 ```
 
 ### Params

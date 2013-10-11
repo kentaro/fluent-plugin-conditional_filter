@@ -174,6 +174,57 @@ describe Fluent::ConditionalFilterOutput do
         }
       end
     end
+
+    context('string_match') do
+      let(:conf) {
+        %[
+          key_pattern @example.com$
+          condition   (staff|user)
+          filter      string_match
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'test').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('with 0 matched key/value pair') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 'guest', 'bar@example.com' => 'guest', 'baz@baz.com' => 'staff')
+          }
+        }
+
+        it {
+          expect(driver.emits[0]).to be_nil
+        }
+      end
+
+      context('with 1 matched key/value pair') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 'staff', 'bar@example.com' => 'guest', 'baz@baz.com' => 'user')
+          }
+        }
+
+        it {
+          expect(driver.emits[0][2].keys.length).to be == 1
+        }
+      end
+
+      context('with 2 matched key/value pairs') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 'staff', 'bar@example.com' => 'user', 'baz@baz.com' => 'staff')
+          }
+        }
+
+        it {
+          expect(driver.emits[0][2].keys.length).to be == 2
+        }
+      end
+    end
   end
 end
 

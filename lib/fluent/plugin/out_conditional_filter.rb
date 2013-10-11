@@ -47,6 +47,11 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
         key.match(@key_pattern_regexp) &&
         record[key].to_f <= condition.to_f
       end
+    when 'string_match'
+      filter_record = record.select do |key, value|
+        key.match(@key_pattern_regexp) &&
+        record[key].match(Regexp.new(condition))
+      end
     else
       raise ArgumentError.new("[out_conditional_filter] no such filter: #{filter}")
     end

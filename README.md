@@ -25,7 +25,7 @@ fluent-plugin-conditional_filter provides a simple filter that filters out key/v
 
 Key pattern to check.
 
-#### `condition` (optional: default = 'http')
+#### `condition` (required)
 
 Condition for the filter below.
 

@@ -17,7 +17,7 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
       )
     end
 
-    @key_pattern_regexp = /#{key_pattern}/
+    @key_pattern_regexp = Regexp.new(key_pattern)
   end
 
   def emit(tag, es, chain)

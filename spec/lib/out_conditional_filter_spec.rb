@@ -6,7 +6,7 @@ describe Fluent::ConditionalFilterOutput do
     context "success" do
       let(:conf) {
         %[
-          key_pattern @example.com$
+          key_pattern @example\.com$
           condition   10
           filter      numeric_upward
         ]
@@ -19,7 +19,7 @@ describe Fluent::ConditionalFilterOutput do
 
       it {
         expect(subject).to be_an_instance_of described_class
-        expect(subject.key_pattern).to be == '@example.com$'
+        expect(subject.key_pattern).to be == "@example\.com$"
         expect(subject.instance_variable_get(:@key_pattern_regexp)).to be == /@example.com$/
       }
     end

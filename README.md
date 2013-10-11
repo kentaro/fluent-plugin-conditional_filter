@@ -4,7 +4,7 @@
 
 ### ConditionalFilterOutput
 
-fluent-plugin-conditional_filter provides a simple filter that filters out key/value pairs that don't match a condition.
+fluent-plugin-conditional_filter provides a simple filter that filters out key/value pairs that don't satisfy a given condition.
 
 ## Usage
 
@@ -13,7 +13,7 @@ fluent-plugin-conditional_filter provides a simple filter that filters out key/v
 ```
 <match test.**>
   add_tag_prefix filtered.
-  key_pattern    @example.com$
+  key_pattern    @example\.com$
   condition      10
   filter         numeric_upward
 </match>
@@ -36,6 +36,12 @@ Set filtering strategy.
 #### `remove_tag_prefix`, `remove_tag_suffix`, `add_tag_prefix`, `add_tag_suffix`
 
 You can also use the params above inherited from [Fluent::HandleTagNameMixin](https://github.com/fluent/fluentd/blob/master/lib/fluent/mixin.rb).
+
+### Filters
+
+#### numeric_upward
+
+Filter out such key/value pairs whose value aren't greater than or equal to the given value as float value.
 
 ## Installation
 

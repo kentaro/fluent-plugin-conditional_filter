@@ -1,4 +1,4 @@
-# Fluent::Plugin::ConditionalFilter [![BuildStatus](https://secure.travis-ci.org/kentaro/fluent-plugin-conditional_filter)](http://travis-ci.org/kentaro/fluent-plugin-conditional_filter)
+# Fluent::Plugin::ConditionalFilter [![BuildStatus](https://secure.travis-ci.org/kentaro/fluent-plugin-conditional_filter.png)](http://travis-ci.org/kentaro/fluent-plugin-conditional_filter)
 
 ## Component
 

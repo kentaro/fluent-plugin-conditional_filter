@@ -27,7 +27,7 @@ When the log below reaches:
 'test' => {
   'foo@example.com' => 5,
   'bar@example.com' => 15,
-  'baz@baz.com'     -> 12,
+  'baz@baz.com'     => 12,
 }
 ```
 

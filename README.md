@@ -14,6 +14,7 @@ If there's such a configuration as below:
 
 ```
 <match test.**>
+  type           conditional_filter
   add_tag_prefix filtered.
   key_pattern    @example\.com$
   condition      10

@@ -225,6 +225,118 @@ describe Fluent::ConditionalFilterOutput do
         }
       end
     end
+
+    context('add_tag_prefix') do
+      let(:conf) {
+        %[
+          add_tag_prefix filtered.
+          key_pattern @example.com$
+          condition   10
+          filter      numeric_upward
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'test').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('add tag prefix') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][0]).to be == 'filtered.test'
+        }
+      end
+    end
+
+    context('remove_tag_prefix') do
+      let(:conf) {
+        %[
+          remove_tag_prefix filtered.
+          key_pattern @example.com$
+          condition   10
+          filter      numeric_upward
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'filtered.filtered.test').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('remove tag prefix') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][0]).to be == 'filtered.test'
+        }
+      end
+    end
+
+    context('add_tag_suffix') do
+      let(:conf) {
+        %[
+          add_tag_suffix .test
+          key_pattern @example.com$
+          condition   10
+          filter      numeric_upward
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'filtered').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('add tag suffix') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][0]).to be == 'filtered.test'
+        }
+      end
+    end
+
+    context('remove_tag_suffix') do
+      let(:conf) {
+        %[
+          remove_tag_suffix .filtered
+          key_pattern @example.com$
+          condition   10
+          filter      numeric_upward
+        ]
+      }
+
+      let(:driver) { Fluent::Test::OutputTestDriver.new(described_class, 'filtered.test.filtered').configure(conf) }
+      subject {
+        driver.instance
+      }
+
+      context('remove tag prefix') do
+        before {
+          driver.run {
+            driver.emit('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          }
+        }
+
+        it {
+          expect(driver.emits[0][0]).to be == 'filtered.test'
+        }
+      end
+    end
   end
 end
 

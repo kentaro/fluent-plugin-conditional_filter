@@ -36,6 +36,7 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
   private
 
   def filter_record(tag, time, record)
+    super
     case filter
     when 'numeric_upward'
       filter_record = record.select do |key, value|

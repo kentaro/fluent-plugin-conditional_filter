@@ -2,6 +2,9 @@ require 'fluent/test'
 require 'fluent/plugin/out_conditional_filter'
 
 RSpec.configure do |config|
+  config.before(:all) do
+    Fluent::Test.setup
+  end
 end
 
 unless ENV.has_key?('VERBOSE')

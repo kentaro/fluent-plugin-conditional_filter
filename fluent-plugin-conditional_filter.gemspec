@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'fluent-plugin-conditional_filter'
-  spec.version       = '0.0.2'
+  spec.version       = '0.0.3'
   spec.authors       = ['Kentaro Kuribayashi']
   spec.email         = ['kentarok@gmail.com']
   spec.description   = %q{A fluent plugin that provides conditional filters}

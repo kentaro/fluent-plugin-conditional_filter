@@ -1,6 +1,11 @@
 class Fluent::ConditionalFilterOutput < Fluent::Output
   Fluent::Plugin.register_output('conditional_filter', self)
 
+  # Define `router` method of v0.12 to support v0.10 or earlier
+  unless method_defined?(:router)
+    define_method("router") { Fluent::Engine }
+  end
+
   include Fluent::HandleTagNameMixin
 
   config_param :key_pattern, :string
@@ -26,7 +31,7 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
       record = filter_record(t, time, record)
 
       if record.any?
-        Fluent::Engine.emit(t, time, record)
+        router.emit(t, time, record)
       end
     end
 

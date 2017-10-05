@@ -21,7 +21,7 @@ module Fluent
             record[key].match(Regexp.new(@condition))
         end
       else
-        raise ArgumentError.new("[out_conditional_filter] no such filter: #{filter}")
+        raise ArgumentError.new("[conditional_filter_rule] no such filter: #{filter}")
       end
 
       filter_record

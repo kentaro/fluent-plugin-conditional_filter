@@ -1,3 +1,4 @@
+require 'fluent/plugin/conditional_filter_rule'
 class Fluent::ConditionalFilterOutput < Fluent::Output
   Fluent::Plugin.register_output('conditional_filter', self)
 
@@ -7,6 +8,7 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
   end
 
   include Fluent::HandleTagNameMixin
+  include Fluent::ConditionalFilterRule
 
   config_param :key_pattern, :string
   config_param :condition,   :string
@@ -28,7 +30,7 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
   def emit(tag, es, chain)
     es.each do |time, record|
       t = tag.dup
-      record = filter_record(t, time, record)
+      record = filter_record(t, time, record, self)
 
       if record.any?
         router.emit(t, time, record)
@@ -37,33 +39,4 @@ class Fluent::ConditionalFilterOutput < Fluent::Output
 
     chain.next
   end
-
-  private
-
-  def filter_record(tag, time, record)
-    super
-    case filter
-    when 'numeric_upward'
-      filter_record = record.select do |key, value|
-        key.match(@key_pattern_regexp) &&
-        record[key].to_f >= condition.to_f
-      end
-    when 'numeric_downward'
-      filter_record = record.select do |key, value|
-        key.match(@key_pattern_regexp) &&
-        record[key].to_f <= condition.to_f
-      end
-    when 'string_match'
-      filter_record = record.select do |key, value|
-        key.match(@key_pattern_regexp) &&
-        record[key].match(Regexp.new(condition))
-      end
-    else
-      raise ArgumentError.new("[out_conditional_filter] no such filter: #{filter}")
-    end
-
-    filter_record
-  end
 end
-
-

@@ -1,5 +1,6 @@
 require 'fluent/test'
 require 'fluent/plugin/out_conditional_filter'
+require 'fluent/plugin/filter_conditional'
 
 RSpec.configure do |config|
   config.before(:all) do
@@ -24,4 +25,3 @@ unless ENV.has_key?('VERBOSE')
   }
   $log = nulllogger
 end
-

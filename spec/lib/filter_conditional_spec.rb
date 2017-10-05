@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Fluent::ConditionalFilter do
+describe Fluent::Plugin::ConditionalFilter do
   describe '#configure' do
 
     context "success" do
@@ -12,7 +12,7 @@ describe Fluent::ConditionalFilter do
         ]
       }
 
-      let(:driver) { Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf) }
+      let(:driver) { Fluent::Test::Driver::Filter.new(described_class).configure(conf) }
       subject {
         driver
       }
@@ -35,7 +35,7 @@ describe Fluent::ConditionalFilter do
 
         it {
           expect {
-            Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf)
+            Fluent::Test::Driver::Filter.new(described_class).configure(conf)
           }.to raise_error(Fluent::ConfigError)
         }
       end
@@ -50,7 +50,7 @@ describe Fluent::ConditionalFilter do
 
         it {
           expect {
-            Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf)
+            Fluent::Test::Driver::Filter.new(described_class).configure(conf)
           }.to raise_error(Fluent::ConfigError)
         }
       end
@@ -65,7 +65,7 @@ describe Fluent::ConditionalFilter do
 
         it {
           expect {
-            Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf)
+            Fluent::Test::Driver::Filter.new(described_class).configure(conf)
           }.to raise_error(Fluent::ConfigError)
         }
       end
@@ -82,41 +82,41 @@ describe Fluent::ConditionalFilter do
         ]
       }
 
-      let(:driver) { Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf) }
+      let(:driver) { Fluent::Test::Driver::Filter.new(described_class).configure(conf) }
 
       context('with 0 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 8, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 8, 'bar@example.com' => 6, 'baz@baz.com' => 15)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0]).to be_nil
+          expect(driver.filtered[0]).to be_nil
         }
       end
 
       context('with 1 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 12, 'bar@example.com' => 6, 'baz@baz.com' => 15)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 1
+          expect(driver.filtered[0][1].keys.length).to be == 1
         }
       end
 
       context('with 2 matched key/value pairs') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 12, 'bar@example.com' => 10, 'baz@baz.com' => 15)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 12, 'bar@example.com' => 10, 'baz@baz.com' => 15)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 2
+          expect(driver.filtered[0][1].keys.length).to be == 2
         }
       end
     end
@@ -130,41 +130,41 @@ describe Fluent::ConditionalFilter do
         ]
       }
 
-      let(:driver) { Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf) }
+      let(:driver) { Fluent::Test::Driver::Filter.new(described_class).configure(conf) }
 
       context('with 0 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 18, 'bar@example.com' => 26, 'baz@baz.com' => 15)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 18, 'bar@example.com' => 26, 'baz@baz.com' => 15)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0]).to be_nil
+          expect(driver.filtered[0]).to be_nil
         }
       end
 
       context('with 1 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 11, 'bar@example.com' => 6, 'baz@baz.com' => 5)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 11, 'bar@example.com' => 6, 'baz@baz.com' => 5)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 1
+          expect(driver.filtered[0][1].keys.length).to be == 1
         }
       end
 
       context('with 2 matched key/value pairs') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 10, 'bar@example.com' => 5, 'baz@baz.com' => 5)
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 10, 'bar@example.com' => 5, 'baz@baz.com' => 5)
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 2
+          expect(driver.filtered[0][1].keys.length).to be == 2
         }
       end
     end
@@ -178,41 +178,41 @@ describe Fluent::ConditionalFilter do
         ]
       }
 
-      let(:driver) { Fluent::Test::FilterTestDriver.new(described_class, 'test').configure(conf) }
+      let(:driver) { Fluent::Test::Driver::Filter.new(described_class).configure(conf) }
 
       context('with 0 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 'guest', 'bar@example.com' => 'guest', 'baz@baz.com' => 'staff')
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 'guest', 'bar@example.com' => 'guest', 'baz@baz.com' => 'staff')
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0]).to be_nil
+          expect(driver.filtered[0]).to be_nil
         }
       end
 
       context('with 1 matched key/value pair') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 'staff', 'bar@example.com' => 'guest', 'baz@baz.com' => 'user')
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 'staff', 'bar@example.com' => 'guest', 'baz@baz.com' => 'user')
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 1
+          expect(driver.filtered[0][1].keys.length).to be == 1
         }
       end
 
       context('with 2 matched key/value pairs') do
         before {
-          driver.run {
-            driver.filter('foo@example.com' => 'staff', 'bar@example.com' => 'user', 'baz@baz.com' => 'staff')
+          driver.run(default_tag: 'test') {
+            driver.feed('foo@example.com' => 'staff', 'bar@example.com' => 'user', 'baz@baz.com' => 'staff')
           }
         }
 
         it {
-          expect(driver.filtered_as_array[0][2].keys.length).to be == 2
+          expect(driver.filtered[0][1].keys.length).to be == 2
         }
       end
     end

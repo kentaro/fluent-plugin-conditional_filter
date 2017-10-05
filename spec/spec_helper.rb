@@ -1,4 +1,5 @@
 require 'fluent/test'
+require 'fluent/test/driver/filter'
 require 'fluent/plugin/out_conditional_filter'
 require 'fluent/plugin/filter_conditional'
 

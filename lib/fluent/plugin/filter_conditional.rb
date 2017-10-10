@@ -1,6 +1,7 @@
 require 'fluent/plugin/conditional_filter_rule'
+require 'fluent/plugin/filter'
 
-class Fluent::ConditionalFilter < Fluent::Filter
+class Fluent::Plugin::ConditionalFilter < Fluent::Plugin::Filter
   Fluent::Plugin.register_filter('conditional', self)
 
   include Fluent::ConditionalFilterRule
